@@ -1,10 +1,11 @@
+console.log("-----INIT DECLARE VARIABLES -----")
 var file = document.getElementById("fileForUpload"),
     txtarea = document.getElementById("fileContents"),
     produccion = [],
     grammar = [],
     grammar1 = [],
     arrayOfLines = [],
-    vari = [],
+    allVariables = [],
     preProd = [],
     prod2d = [],
     prod = [],
@@ -32,6 +33,7 @@ var file = document.getElementById("fileForUpload"),
     regExp2 = /\~([^~])\~/g,
     regExp3 = /\~([^~]*)\~$/g,
     regexVar = /\d/g;
+    console.log("-----END DECLARE VARIABLES -----")
 
 // regExp3 = /\-([^-])\-/;
 
@@ -48,13 +50,13 @@ var file = document.getElementById("fileForUpload"),
 
 //     return result;
 // }
-
 function load() {
+    console.log("-----INIT function load() -----")
     file.value = ''; //for IE11, latest Chrome/Firefox/Opera...
     txtarea.innerHTML = "Contenido del archivo...";
     grammar = [];
     arrayOfLines = [];
-    vari = [];
+    allVariables = [];
     preProd = [];
     prod2d = [];
     prod = [];
@@ -67,29 +69,49 @@ function load() {
     caracteres = [];
     // console.clear();
     document.addEventListener('contextmenu', event => event.preventDefault());
+    console.log("-----END function load() -----")
 }
 
+
+
+
 function rst() {
+    console.log("-----INIT function rst() -----")
     location.reload(true);
     if (document.getElementById("runbtn").disabled = true)
         document.getElementById("runbtn").disabled = false;
     // console.clear();
+    console.log("-----END function rst() -----")
 }
 
+
+
+
 function limpiarlista(nomlista) {
+    console.log("-----INIT function limpiarlista() -----")
     varroot = document.getElementById(nomlista);
     while (varroot.firstChild) {
         varroot.removeChild(varroot.firstChild);
     }
+    console.log("-----END function limpiarlista() -----")
 }
 
+
+
+
 function notificar() {
+    console.log("-----INIT function notificar() -----")
     var x = document.getElementById("snackbar");
     x.className = "show";
     setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
+    console.log("-----END function notificar() -----")
 }
 
+
+
+
 function processFile() {
+    console.log("-----INIT function processFile() -----")
     var file = document.getElementById("fileForUpload").files[0];
     if (file) {
         var reader = new FileReader();
@@ -110,26 +132,27 @@ function processFile() {
         }
     }
     document.getElementById("runbtn").disabled = false;
+    console.log("-----END function processFile() -----")
 }
 
-// function reg() {
-//     var regExp2 = /\-([^-]+)\-/;
-//     var matches = "I expect five hundred dollars '$500'.";
-//     matches = matches.replace(/'/g,"-");
-//     // alert(matches);
-//     var matches2 = regExp2.exec(matches);
-//     //matches[1] contains the value between the parentheses
-//     alert(matches2[1]);
-// }
+
+
+
 function sum(num) {
+    console.log("-----INIT function sum() -----")
     if (num === 0) {
         return 0;
     } else {
         return `num -> ${num + sum(--num)}`
     }
+    console.log("-----END function sum() -----")
 }
 
+
+
+
 function primero(el, listaVar) {
+    console.log("-----INIT function primero() -----")
     // debugger;
     var funcPrim = [];
     if (el in result) {
@@ -169,9 +192,14 @@ function primero(el, listaVar) {
     }
     // console.log(nFuncPrim);
     return nFuncPrim;
+    console.log("-----END function primero() -----")
 }
 
+
+
+
 function siguiente(el, listaVar) {
+    console.log("-----INIT function siguiente() -----")
     // debugger;
     if (el in result) {
         for (var i in result) {
@@ -224,9 +252,14 @@ function siguiente(el, listaVar) {
         funcSig[el].splice(posE, 1);
     }
     return funcSig[el];
+    console.log("-----END function siguiente() -----")
 }
 
+
+
+
 function run() {
+    console.log("-----INIT function run() -----")
     document.getElementById("runbtn").disabled = true;
     var txtarea = document.getElementById("fileContents");
     grammar1 = txtarea.value;
@@ -236,13 +269,13 @@ function run() {
     arrayOfLines = grammar.split('\n');
     arrayOfLinesCopy = arrayOfLines;
     // console.log(arrayOfLines);
-    vari = [];
+    allVariables = [];
     for (var i = 0; i < arrayOfLines.length; i++) {
         var pos = arrayOfLines[i].indexOf("=");
-        vari[i] = arrayOfLines[i].slice(0, pos);
+        allVariables[i] = arrayOfLines[i].slice(0, pos);
         // console.log(prod[i]+" array "+[i]);
     }
-    // console.log(vari);
+    // console.log(allVariables);
     // console.log("Lineas sin prod: "+arrayOfLines);
     for (var i = 0; i < arrayOfLines.length; i++) {
         var pos = arrayOfLines[i].indexOf("=");
@@ -261,7 +294,7 @@ function run() {
         prod = prod.concat(prod2d[i]);
     }
     // console.log(prod);
-    caracteres = vari.concat("e", "", " ", null);
+    caracteres = allVariables.concat("e", "", " ", null);
     for (var i = 0; i < prod.length; i++) {
         preTerminales[i] = prod[i].replace(/'/g, "~");
         terminales = terminales.concat(regExp.exec(preTerminales[i]));
@@ -313,14 +346,24 @@ function run() {
     // var str2 = str.replace(/'/g,"-"); 
     // var newstr = str2.split("-").pop().split("-")[0]; // returns 'two'
     // console.log(newstr);
+
+
+    //REMUEVE "'" DENTRO DE LOS ARRAYS
     produccion = prod2d;
     for (var i in produccion) {
         for (var j in produccion[i]) {
             produccion[i][j] = produccion[i][j].replace(/'/g, "")
         }
     }
-    console.log(produccion);
-    vari.forEach((variable, i) => result[variable] = produccion[i]);
+
+
+    console.log("Produccion:",produccion);
+
+
+    //Result pasa a hacer un objeto y se pierde la 'a' 
+    allVariables.forEach((variable, i) => result[variable] = produccion[i]);
+
+
 
     var isRecursive = []
     var newProd = {}
@@ -330,53 +373,53 @@ function run() {
     //         newGrammar[i][j] = newGrammar[i][j].replace(/'/g, "")
     //     }
     // }
-    for (let i = 0; i < vari.length; i++) {
+    for (let i = 0; i < allVariables.length; i++) {
         if (isRecursive[i] == undefined) {
             isRecursive[i] = []
         }
         for (let j = 0; j < produccion[i].length; j++) {
-            if (produccion[i][j].startsWith(vari[i])) {
+            if (produccion[i][j].startsWith(allVariables[i])) {
                 isRecursive[i].push(true)
             } else {
                 isRecursive[i].push(false)
             }
         }
     }
-    for (let i = 0; i < vari.length; i++) {
+    for (let i = 0; i < allVariables.length; i++) {
         for (let j = 0; j < produccion[i].length; j++) {
-            var varPrima = vari[i] + '1'
+            var varPrima = allVariables[i] + '1'
             if (isRecursive[i].includes(true)) {
                 var removeR = ''
-                if (newProd[vari[i]] == undefined) {
-                    newProd[vari[i]] = []
+                if (newProd[allVariables[i]] == undefined) {
+                    newProd[allVariables[i]] = []
                 }
                 if (newProd[varPrima] == undefined) {
                     newProd[varPrima] = []
                 }
 
                 if (isRecursive[i][j] == true) {
-                    removeR = produccion[i][j].replace(vari[i], '')
+                    removeR = produccion[i][j].replace(allVariables[i], '')
                     removeR += ' ' + varPrima
                     newProd[varPrima].push(removeR)
                 } else {
                     removeR = produccion[i][j]
                     removeR += ' ' + varPrima
-                    newProd[vari[i]].push(removeR)
+                    newProd[allVariables[i]].push(removeR)
                     // console.log('Variable Prima recursiva ' + varPrima);
                 }
-                // console.log(vari[i] + ' si es recursiva');
+                // console.log(allVariables[i] + ' si es recursiva');
             } else {
-                newProd[vari[i]] = produccion[i]
+                newProd[allVariables[i]] = produccion[i]
             }
         }
         if (newProd[varPrima] != undefined && !newProd[varPrima].includes('e')) {
             newProd[varPrima].push('e')
         }
     }
-    console.log(isRecursive);
+    console.log("isRecursive:",isRecursive);
 
     console.log('---New Prod Json---');
-    console.log(newProd);
+    console.log("newProd:",newProd);
     var sinRKeys = Object.keys(newProd)
     var sinRText = ""
     var sinRVari
@@ -388,7 +431,7 @@ function run() {
     terminalesSinR.forEach(t => {
         newSinR = newSinR.replaceAll(t, "'" + t + "'")
     });
-    console.log('New', newSinR);
+    console.log('New:', newSinR);
     document.getElementById("sinRContent").innerHTML = sinRText
 
     // terminales2.forEach((terminal, i) => result2[terminal] = produccion[i]);
@@ -430,9 +473,14 @@ function run() {
     // console.log(produ);
     showArrays(newSinR, sinRKeys);
     // document.getElementById("runbtn").disabled = true;
+    console.log("-----END function run() -----")
 }
 
+
+
+
 function primeroSiguiente(newSinR, sinRKeys) {
+    console.log("-----INIT function primeroSiguiente() -----")
     // document.getElementById("runbtn").disabled = true;
     var txtarea = document.getElementById("sinRContent");
     grammar1 = txtarea.value;
@@ -442,13 +490,13 @@ function primeroSiguiente(newSinR, sinRKeys) {
     arrayOfLines = grammar.split('\n');
     arrayOfLinesCopy = arrayOfLines;
     // console.log(arrayOfLines);
-    vari = [];
+    allVariables = [];
     for (var i = 0; i < arrayOfLines.length; i++) {
         var pos = arrayOfLines[i].indexOf("=");
-        vari[i] = arrayOfLines[i].slice(0, pos);
+        allVariables[i] = arrayOfLines[i].slice(0, pos);
         // console.log(prod[i]+" array "+[i]);
     }
-    // console.log(vari);
+    // console.log(allVariables);
     // console.log("Lineas sin prod: "+arrayOfLines);
     for (var i = 0; i < arrayOfLines.length; i++) {
         var pos = arrayOfLines[i].indexOf("=");
@@ -467,7 +515,7 @@ function primeroSiguiente(newSinR, sinRKeys) {
         prod = prod.concat(prod2d[i]);
     }
     // console.log(prod);
-    caracteres = vari.concat("e", "", " ", null);
+    caracteres = allVariables.concat("e", "", " ", null);
     for (var i = 0; i < prod.length; i++) {
         preTerminales[i] = prod[i].replace(/'/g, "~");
         terminales = terminales.concat(regExp.exec(preTerminales[i]));
@@ -526,13 +574,18 @@ function primeroSiguiente(newSinR, sinRKeys) {
         }
     }
     console.log(produccion);
-    vari.forEach((variable, i) => result[variable] = produccion[i]);
+    allVariables.forEach((variable, i) => result[variable] = produccion[i]);
 
     showArrays2(sinRKeys);
+    console.log("-----END function primeroSiguiente() -----")
 }
 
+
+
+
 function showArrays2(uniqueVari) {
-    // console.log(vari);
+    console.log("-----INIT function showArrays2() -----")
+    // console.log(allVariables);
     // uniqueVari = [...new Set(vari)];
     // console.log('SinRKey', sinRKeys);
     // console.log('OrigiVar', uniqueVari);
@@ -552,9 +605,9 @@ function showArrays2(uniqueVari) {
             var termi = fPrimero[i][j];
             var posic = termS.indexOf(termi);
             if (posic != -1) {
-                produk[i][posic] = `${vari[i]} → ${produccion[i][j]}`;
+                produk[i][posic] = `${allVariables[i]} → ${produccion[i][j]}`;
                 if (produk[i][posic].includes("undefined")) {
-                    produk[i][posic] = `${vari[i]} → ${produccion[i][j - 1]}`;
+                    produk[i][posic] = `${allVariables[i]} → ${produccion[i][j - 1]}`;
                 }
             }
             else {
@@ -562,9 +615,9 @@ function showArrays2(uniqueVari) {
                     var varia = fSiguiente[i][k];
                     var poss = termS.indexOf(varia);
                     if (poss != -1) {
-                        produk[i][poss] = `${vari[i]} → ${produccion[i][j]}`;
+                        produk[i][poss] = `${allVariables[i]} → ${produccion[i][j]}`;
                         var sitio = produk[i].length - 1;
-                        produk[i][sitio] = `${vari[i]} → ${produccion[i][j]}`;
+                        produk[i][sitio] = `${allVariables[i]} → ${produccion[i][j]}`;
                     }
                 }
             }
@@ -632,18 +685,28 @@ function showArrays2(uniqueVari) {
         tablaSim += '</tr>';
     }
     document.getElementById("symTable").innerHTML = tablaSim;
+    console.log("-----END function showArrays2() -----")
 }
 
+
+
+
 function arrayEquals(a, b) {
+    console.log("-----INIT function arrayEquals() -----")
     return Array.isArray(a) &&
         Array.isArray(b) &&
         a.length === b.length &&
         a.every((val, index) => val === b[index]);
+        console.log("-----INIT function arrayEquals() -----")
 }
 
+
+
+
 function showArrays(newSinR, sinRKeys) {
-    // console.log(vari);
-    uniqueVari = [...new Set(vari)];
+    console.log("-----INIT function showArrays() -----")
+    // console.log(allVariables);
+    uniqueVari = [...new Set(allVariables)];
     console.log('SinRKey', sinRKeys);
     console.log('OrigiVar', uniqueVari);
     var str = '<ul id="lvar">';
@@ -662,8 +725,8 @@ function showArrays(newSinR, sinRKeys) {
     var produk1 = [];
     for (var i in prod2d) {
         for (var j in prod2d[i]) {
-            produk1.push(`${vari[i]}→${prod2d[i][j]}`);
-            tabla += '<tr class="mdc-data-table__row"><td class="mdc-data-table__cell">' + vari[i] + '</td><td class="mdc-data-table__cell">' + prod2d[i][j].replace(/'/g, "") + '</td></tr>';
+            produk1.push(`${allVariables[i]}→${prod2d[i][j]}`);
+            tabla += '<tr class="mdc-data-table__row"><td class="mdc-data-table__cell">' + allVariables[i] + '</td><td class="mdc-data-table__cell">' + prod2d[i][j].replace(/'/g, "") + '</td></tr>';
         }
     }
     document.getElementById("producciones").innerHTML = tabla;
@@ -691,9 +754,9 @@ function showArrays(newSinR, sinRKeys) {
                 var termi = fPrimero[i][j];
                 var posic = termS.indexOf(termi);
                 if (posic != -1) {
-                    produk[i][posic] = `${vari[i]} → ${produccion[i][j]}`;
+                    produk[i][posic] = `${allVariables[i]} → ${produccion[i][j]}`;
                     if (produk[i][posic].includes("undefined")) {
-                        produk[i][posic] = `${vari[i]} → ${produccion[i][j - 1]}`;
+                        produk[i][posic] = `${allVariables[i]} → ${produccion[i][j - 1]}`;
                     }
                 }
                 else {
@@ -701,9 +764,9 @@ function showArrays(newSinR, sinRKeys) {
                         var varia = fSiguiente[i][k];
                         var poss = termS.indexOf(varia);
                         if (poss != -1) {
-                            produk[i][poss] = `${vari[i]} → ${produccion[i][j]}`;
+                            produk[i][poss] = `${allVariables[i]} → ${produccion[i][j]}`;
                             var sitio = produk[i].length - 1;
-                            produk[i][sitio] = `${vari[i]} → ${produccion[i][j]}`;
+                            produk[i][sitio] = `${allVariables[i]} → ${produccion[i][j]}`;
                         }
                     }
                 }
@@ -801,5 +864,12 @@ function showArrays(newSinR, sinRKeys) {
     // console.log(uniqueTerm);
     // console.log(caracteres);
     console.log("----------------------");
+    console.log("-----INIT function showArrays() -----")
 }
 // document.getElementById('fileForUpload').addEventListener('change', run, false);
+
+//UPGRADE
+function tryLodash(){
+    let testLod = _.chunk(['a', 'b', 'c', 'd'], 2);
+    console.log("lodash:",testLod);
+}

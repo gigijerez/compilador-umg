@@ -19,6 +19,8 @@ uniqueTerm = [],
 caracteres = [],
 caracteresV = [];
 // regExp = /\-([^-]+)\-/;
+console.log("-----INIT FUNCTION 2 js-----")
+
 
 function load(){
     file.value = ''; //for IE11, latest Chrome/Firefox/Opera...
@@ -240,3 +242,5 @@ function showArrays() {
 
 }
 // document.getElementById('fileForUpload').addEventListener('change', run, false);
+
+console.log("-----END FUNCTION 2 js-----")
