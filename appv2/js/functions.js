@@ -363,6 +363,9 @@ function run() {
     //Result pasa a hacer un objeto y se pierde la 'a' 
     allVariables.forEach((variable, i) => result[variable] = produccion[i]);
 
+    result = {'S':["S+T","T"],'T':["T*F","F"],'F':["a","b"]}
+
+
 
 
     var isRecursive = []
@@ -385,9 +388,12 @@ function run() {
             }
         }
     }
+
+    // INIT PROCESO DE PRIMAS
     for (let i = 0; i < allVariables.length; i++) {
         for (let j = 0; j < produccion[i].length; j++) {
             var varPrima = allVariables[i] + '1'
+            //es recursiva? si
             if (isRecursive[i].includes(true)) {
                 var removeR = ''
                 if (newProd[allVariables[i]] == undefined) {
@@ -409,13 +415,18 @@ function run() {
                 }
                 // console.log(allVariables[i] + ' si es recursiva');
             } else {
-                newProd[allVariables[i]] = produccion[i]
+            //no es recursiva
+            newProd[allVariables[i]] =_.compact(_.concat(newProd[allVariables[i]],produccion[i]));
             }
         }
         if (newProd[varPrima] != undefined && !newProd[varPrima].includes('e')) {
             newProd[varPrima].push('e')
         }
     }
+    // END PROCESO DE PRIMAS
+
+
+
     console.log("isRecursive:",isRecursive);
 
     console.log('---New Prod Json---');
