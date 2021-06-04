@@ -143,9 +143,9 @@ function sum(num) {
     if (num === 0) {
         return 0;
     } else {
+        console.log("-----END function sum() -----")
         return `num -> ${num + sum(--num)}`
     }
-    console.log("-----END function sum() -----")
 }
 
 
@@ -191,8 +191,8 @@ function primero(el, listaVar) {
         nFuncPrim.push("e");
     }
     // console.log(nFuncPrim);
-    return nFuncPrim;
     console.log("-----END function primero() -----")
+    return nFuncPrim;
 }
 
 
@@ -200,7 +200,9 @@ function primero(el, listaVar) {
 
 function siguiente(el, listaVar) {
     console.log("-----INIT function siguiente() -----")
+    
     // debugger;
+    
     if (el in result) {
         for (var i in result) {
             if ((funcSig[el] == null) || (funcSig[el] == undefined) || (funcSig[el] == "")) {
@@ -251,8 +253,8 @@ function siguiente(el, listaVar) {
         var posE = funcSig[el].indexOf("e");
         funcSig[el].splice(posE, 1);
     }
-    return funcSig[el];
     console.log("-----END function siguiente() -----")
+    return funcSig[el];
 }
 
 
@@ -267,7 +269,6 @@ function run() {
 
     // console.log(grammar);
     arrayOfLines = grammar.split('\n');
-    arrayOfLinesCopy = arrayOfLines;
     // console.log(arrayOfLines);
     allVariables = [];
     for (var i = 0; i < arrayOfLines.length; i++) {
@@ -362,8 +363,8 @@ function run() {
 
     //Result pasa a hacer un objeto y se pierde la 'a' 
     allVariables.forEach((variable, i) => result[variable] = produccion[i]);
-
-    result = {'S':["S+T","T"],'T':["T*F","F"],'F':["a","b"]}
+    //_.compact(_.concat())
+    //result = {'S':["S+T","T"],'T':["T*F","F"],'F':["a","b"]}
 
 
 
@@ -416,97 +417,92 @@ function run() {
                 // console.log(allVariables[i] + ' si es recursiva');
             } else {
             //no es recursiva
-            newProd[allVariables[i]] =_.compact(_.concat(newProd[allVariables[i]],produccion[i]));
+            newProd[allVariables[i]] =_.compact(_.uniq(_.concat(newProd[allVariables[i]],produccion[i])));
             }
         }
         if (newProd[varPrima] != undefined && !newProd[varPrima].includes('e')) {
             newProd[varPrima].push('e')
         }
+
     }
     // END PROCESO DE PRIMAS
+    console.log("********* VALIDATE PRIMA")
+    validatePrima = {}
+    
+    var arrayKeyNewProd = [...new Set(allVariables)]
+    console.log(arrayKeyNewProd);
+
+    for(var i = 0; i < arrayKeyNewProd.length; i++ ){
+        if(_.has(newProd,arrayKeyNewProd[i]+1)){
+
+            var arrayResult = _.get(newProd,arrayKeyNewProd[i])
+            for (let j = 0; j < arrayResult.length; j++) {
+
+                if(arrayResult[j].includes(arrayKeyNewProd[i]+1)){
+                    console.log("SI TIENE")
+                    console.log(newProd[arrayKeyNewProd[i]][j]);  
+
+                }else{
+                    console.log("NO TIENE")
+                    newProd[arrayKeyNewProd[i]][j] +=" "+arrayKeyNewProd[i] + 1
+                    console.log(newProd[arrayKeyNewProd[i]][j]);                    
+                }                
+            }
+        }
+    }
+    
+    
 
 
+    for (let i = 0; i < produccion.length; i++) {
+    
+    }
 
+    // INIT PROCESO RENDER GRAMATICA SIN RECURSIVIDAD TEXTAREA
     console.log("isRecursive:",isRecursive);
 
     console.log('---New Prod Json---');
     console.log("newProd:",newProd);
-    var sinRKeys = Object.keys(newProd)
+    var gramNoReAllVariables = Object.keys(newProd)
     var sinRText = ""
     var sinRVari
-    for (let index = 0; index < sinRKeys.length; index++) {
-        sinRText += sinRKeys[index] + '= ' + newProd[sinRKeys[index]].join(" | ") + "\n"
+    for (let index = 0; index < gramNoReAllVariables.length; index++) {
+        sinRText += gramNoReAllVariables[index] + '= ' + newProd[gramNoReAllVariables[index]].join(" | ") + "\n"
     }
     var terminalesSinR = uniqueTerm;
-    var newSinR = sinRText;
+    var gramNoRecursiveTxt = sinRText;
     terminalesSinR.forEach(t => {
-        newSinR = newSinR.replaceAll(t, "'" + t + "'")
+        gramNoRecursiveTxt = gramNoRecursiveTxt.replaceAll(t, "'" + t + "'")
     });
-    console.log('New:', newSinR);
-    document.getElementById("sinRContent").innerHTML = sinRText
+    console.log('gramNoRecursiveTxt:', gramNoRecursiveTxt);
+    document.getElementById("sinRContent").innerHTML = gramNoRecursiveTxt
+    // END PROCESO RENDER GRAMATICA SIN RECURSIVIDAD TEXTAREA
 
-    // terminales2.forEach((terminal, i) => result2[terminal] = produccion[i]);
-    // console.log(result2);
-
-    // for (var i in result){
-    //     console.log(i);
-    // }
-
-    // var chares = {};
-    // for (var i in result)
-    // {
-    //     for (var j in result[i])
-    //     {
-    //         if ((terminales2.includes(result[i][j].charAt(0)))||(result[i][j].charAt(0)=="e")) {
-    //             chares += result[i][j].charAt(0);
-    //         }
-    //         // console.log(`PRIMERO(${[i]}) = ${chares}`);
-    //         // console.log(chares);
-    //     }
-    // }
-    // alert(varlength);
-    // for (var i = 0; i < prod.length; i++) {
-    //     varr[i] = prod[i].replace(/'/g,"");
-    // }
-    // for (var i = 0; i < varlength; i++) {
-    //         varr[i] = prod2d[i].length;
-    // }
-    // alert(varr);
-    // console.log(arrayOfLines);
-    // for (var i in prod2d) 
-    // {
-    //     for (var j in prod2d[i]) 
-    //     {   
-    //         produ = produ.concat(prod2d[i][j].replace(/'/g,""));
-    //     }
-    // }
-
-    // console.log(produ);
-    showArrays(newSinR, sinRKeys);
-    // document.getElementById("runbtn").disabled = true;
+    
+    showArrays(gramNoRecursiveTxt, gramNoReAllVariables);
     console.log("-----END function run() -----")
 }
 
 
 
 
-function primeroSiguiente(newSinR, sinRKeys) {
+function primeroSiguiente(gramNoRecursiveTxt, gramNoReAllVariables) {
     console.log("-----INIT function primeroSiguiente() -----")
     // document.getElementById("runbtn").disabled = true;
-    var txtarea = document.getElementById("sinRContent");
-    grammar1 = txtarea.value;
-    grammar = grammar1.replace(/ /g, "");
+
+
+    grammar = gramNoRecursiveTxt.replace(/ /g, "");
 
     // console.log(grammar);
-    arrayOfLines = grammar.split('\n');
-    arrayOfLinesCopy = arrayOfLines;
+    arrayOfLines = _.compact(grammar.split('\n'));
     // console.log(arrayOfLines);
-    allVariables = [];
-    for (var i = 0; i < arrayOfLines.length; i++) {
-        var pos = arrayOfLines[i].indexOf("=");
-        allVariables[i] = arrayOfLines[i].slice(0, pos);
-        // console.log(prod[i]+" array "+[i]);
-    }
+    allVariables = gramNoReAllVariables;
+    // for (var i = 0; i < arrayOfLines.length; i++) {
+    //     var pos = arrayOfLines[i].indexOf("=");
+    //     allVariables[i] = arrayOfLines[i].slice(0, pos);
+    //     // console.log(prod[i]+" array "+[i]);
+    // }
+    
     // console.log(allVariables);
     // console.log("Lineas sin prod: "+arrayOfLines);
     for (var i = 0; i < arrayOfLines.length; i++) {
@@ -522,11 +518,14 @@ function primeroSiguiente(newSinR, sinRKeys) {
     }
 
     // console.log(prod2d);
+    prod = []
     for (var i = 0; i < prod2d.length; i++) {
         prod = prod.concat(prod2d[i]);
     }
     // console.log(prod);
     caracteres = allVariables.concat("e", "", " ", null);
+    preTerminales = []
+    terminales = []
     for (var i = 0; i < prod.length; i++) {
         preTerminales[i] = prod[i].replace(/'/g, "~");
         terminales = terminales.concat(regExp.exec(preTerminales[i]));
@@ -539,6 +538,7 @@ function primeroSiguiente(newSinR, sinRKeys) {
     // console.log(terminales);
     terminales = terminales.filter((el) => !caracteres.includes(el));
     // console.log(terminales);
+    terminales2 = []
     for (var i = 0; i < terminales.length; i++) {
         terminales2 = terminales2.concat(terminales[i]);
     }
@@ -587,7 +587,7 @@ function primeroSiguiente(newSinR, sinRKeys) {
     console.log(produccion);
     allVariables.forEach((variable, i) => result[variable] = produccion[i]);
 
-    showArrays2(sinRKeys);
+    showArrays2(gramNoReAllVariables);
     console.log("-----END function primeroSiguiente() -----")
 }
 
@@ -598,14 +598,16 @@ function showArrays2(uniqueVari) {
     console.log("-----INIT function showArrays2() -----")
     // console.log(allVariables);
     // uniqueVari = [...new Set(vari)];
-    // console.log('SinRKey', sinRKeys);
+    // console.log('SinRKey', gramNoReAllVariables);
     // console.log('OrigiVar', uniqueVari);
     
-    var termS = terminales2;
-    termS.push("$");
+    var arrayTerminals = terminales2;
+    arrayTerminals.push("$");
+    console.log("**Funcion Primero")
     for (var i in uniqueVari) {
         fPrimero.push(primero(uniqueVari[i], uniqueVari));
     }
+    console.log("**Funcion Siguiente")
     for (var i in uniqueVari) {
         fSiguiente.push(siguiente(uniqueVari[i], uniqueVari));
     }
@@ -614,7 +616,7 @@ function showArrays2(uniqueVari) {
         produk.push(["", "", "", "", "", "", "", ""])
         for (var j in fPrimero[i]) {
             var termi = fPrimero[i][j];
-            var posic = termS.indexOf(termi);
+            var posic = arrayTerminals.indexOf(termi);
             if (posic != -1) {
                 produk[i][posic] = `${allVariables[i]} → ${produccion[i][j]}`;
                 if (produk[i][posic].includes("undefined")) {
@@ -624,7 +626,7 @@ function showArrays2(uniqueVari) {
             else {
                 for (var k in fSiguiente[i]) {
                     var varia = fSiguiente[i][k];
-                    var poss = termS.indexOf(varia);
+                    var poss = arrayTerminals.indexOf(varia);
                     if (poss != -1) {
                         produk[i][poss] = `${allVariables[i]} → ${produccion[i][j]}`;
                         var sitio = produk[i].length - 1;
@@ -703,28 +705,29 @@ function showArrays2(uniqueVari) {
 
 
 function arrayEquals(a, b) {
-    console.log("-----INIT function arrayEquals() -----")
     return Array.isArray(a) &&
         Array.isArray(b) &&
         a.length === b.length &&
         a.every((val, index) => val === b[index]);
-        console.log("-----INIT function arrayEquals() -----")
+    
 }
 
 
 
 
-function showArrays(newSinR, sinRKeys) {
+function showArrays(gramNoRecursiveTxt, gramNoReAllVariables) {
     console.log("-----INIT function showArrays() -----")
     // console.log(allVariables);
     uniqueVari = [...new Set(allVariables)];
-    console.log('SinRKey', sinRKeys);
+    console.log('SinRKey', gramNoReAllVariables);
     console.log('OrigiVar', uniqueVari);
     var str = '<ul id="lvar">';
     uniqueVari.forEach(function (item) {
         str += '<li>' + item + '</li>';
     });
     str += '</ul>';
+    
+    // RENDERIZA LA COLUMNA VARIABLES
     txtvariables.innerHTML += str;
 
     var str2 = '<ul id="lter">';
@@ -732,6 +735,9 @@ function showArrays(newSinR, sinRKeys) {
         str2 += '<li>' + item + '</li>';
     });
     str2 += '</ul>';
+
+
+    // RENDERIZA LA COLUMNA TERMINALES
     txtterminales.innerHTML += str2;
     var produk1 = [];
     for (var i in prod2d) {
@@ -740,6 +746,7 @@ function showArrays(newSinR, sinRKeys) {
             tabla += '<tr class="mdc-data-table__row"><td class="mdc-data-table__cell">' + allVariables[i] + '</td><td class="mdc-data-table__cell">' + prod2d[i][j].replace(/'/g, "") + '</td></tr>';
         }
     }
+    // RENDERIZA LA COLUMNA PRODUCCIONES
     document.getElementById("producciones").innerHTML = tabla;
     // fSiguiente = [
     // [')','$'],
@@ -748,9 +755,9 @@ function showArrays(newSinR, sinRKeys) {
     // ['+',')','$'],
     // ['*','+',')','$'],
     // ];
-    var termS = terminales2;
-    termS.push("$");
-    if (arrayEquals(uniqueVari, sinRKeys)) {
+    var arrayTerminals = terminales2;
+    arrayTerminals.push("$");
+    if (arrayEquals(uniqueVari, gramNoReAllVariables)) {
         console.log('Iguales');
         for (var i in uniqueVari) {
             fPrimero.push(primero(uniqueVari[i], uniqueVari));
@@ -763,7 +770,7 @@ function showArrays(newSinR, sinRKeys) {
             produk.push(["", "", "", "", "", "", "", ""])
             for (var j in fPrimero[i]) {
                 var termi = fPrimero[i][j];
-                var posic = termS.indexOf(termi);
+                var posic = arrayTerminals.indexOf(termi);
                 if (posic != -1) {
                     produk[i][posic] = `${allVariables[i]} → ${produccion[i][j]}`;
                     if (produk[i][posic].includes("undefined")) {
@@ -773,7 +780,7 @@ function showArrays(newSinR, sinRKeys) {
                 else {
                     for (var k in fSiguiente[i]) {
                         var varia = fSiguiente[i][k];
-                        var poss = termS.indexOf(varia);
+                        var poss = arrayTerminals.indexOf(varia);
                         if (poss != -1) {
                             produk[i][poss] = `${allVariables[i]} → ${produccion[i][j]}`;
                             var sitio = produk[i].length - 1;
@@ -847,7 +854,7 @@ function showArrays(newSinR, sinRKeys) {
         document.getElementById("symTable").innerHTML = tablaSim;
     } else {
         console.log('Diferentes');
-        primeroSiguiente(newSinR, sinRKeys);
+        primeroSiguiente(gramNoRecursiveTxt, gramNoReAllVariables);
     }
     console.log(produk);
     console.log(produk1);
@@ -875,7 +882,7 @@ function showArrays(newSinR, sinRKeys) {
     // console.log(uniqueTerm);
     // console.log(caracteres);
     console.log("----------------------");
-    console.log("-----INIT function showArrays() -----")
+    console.log("-----END function showArrays() -----")
 }
 // document.getElementById('fileForUpload').addEventListener('change', run, false);
 
