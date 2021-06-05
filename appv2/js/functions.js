@@ -35,21 +35,6 @@ var file = document.getElementById("fileForUpload"),
     regexVar = /\d/g;
     console.log("-----END DECLARE VARIABLES -----")
 
-// regExp3 = /\-([^-])\-/;
-
-// function makeTableHTML(myArray) {
-//     var result = "<table border=1>";
-//     for(var i=0; i<myArray.length; i++) {
-//         result += "<tr>";
-//         for(var j=0; j<myArray[i].length; j++){
-//             result += "<td>"+myArray[i][j]+"</td>";
-//         }
-//         result += "</tr>";
-//     }
-//     result += "</table>";
-
-//     return result;
-// }
 function load() {
     console.log("-----INIT function load() -----")
     file.value = ''; //for IE11, latest Chrome/Firefox/Opera...
@@ -67,7 +52,6 @@ function load() {
     uniqueVari = [];
     uniqueTerm = [];
     caracteres = [];
-    // console.clear();
     document.addEventListener('contextmenu', event => event.preventDefault());
     console.log("-----END function load() -----")
 }
@@ -80,7 +64,6 @@ function rst() {
     location.reload(true);
     if (document.getElementById("runbtn").disabled = true)
         document.getElementById("runbtn").disabled = false;
-    // console.clear();
     console.log("-----END function rst() -----")
 }
 
@@ -119,12 +102,6 @@ function processFile() {
         reader.onload = function (evt) {
             var contents = evt.target.result;
             txtarea.innerHTML = contents;
-            // alert( "Got the file.\n" 
-            // +"name: " + file.name + "\n"
-            // +"type: " + file.type + "\n"
-            // +"size: " + file.size + " bytes\n"
-            // + "starts with: \n" + contents
-            // );  
             notificar();
         }
         reader.onerror = function (evt) {
@@ -153,7 +130,7 @@ function sum(num) {
 
 function primero(el, listaVar) {
     console.log("-----INIT function primero() -----")
-    // debugger;
+
     var funcPrim = [];
     if (el in result) {
         for (var j in result[el]) {
@@ -181,16 +158,16 @@ function primero(el, listaVar) {
         }
     }
     else {
-        // console.log(`${el} NO está en result`);
+
     }
     var nFuncPrim = [...new Set(funcPrim)]
     if (nFuncPrim.includes("e")) {
         var posE = nFuncPrim.indexOf("e");
-        // console.log(`e esta en la pos: ${posE}`);
+
         nFuncPrim.splice(posE, 1);
         nFuncPrim.push("e");
     }
-    // console.log(nFuncPrim);
+
     console.log("-----END function primero() -----")
     return nFuncPrim;
 }
@@ -201,7 +178,7 @@ function primero(el, listaVar) {
 function siguiente(el, listaVar) {
     console.log("-----INIT function siguiente() -----")
     
-    // debugger;
+
     
     if (el in result) {
         for (var i in result) {
@@ -210,11 +187,7 @@ function siguiente(el, listaVar) {
             }
             for (var j in result[i]) {
                 var pCadena = result[i][j].indexOf(el);
-                // if (pCadena!=-1){
-                //     console.log(`${el} está en ${i}`)
-                // }else{
-                //     console.log(`${el} NO está en ${i}`)
-                // }
+
                 if (pCadena != -1) {
                     var pCadena2 = pCadena + 1;
                     var subToken = result[i][j].substring(pCadena2);
@@ -267,86 +240,60 @@ function run() {
     grammar1 = txtarea.value;
     grammar = grammar1.replace(/ /g, "");
 
-    // console.log(grammar);
+
     arrayOfLines = grammar.split('\n');
-    // console.log(arrayOfLines);
+
     allVariables = [];
     for (var i = 0; i < arrayOfLines.length; i++) {
         var pos = arrayOfLines[i].indexOf("=");
         allVariables[i] = arrayOfLines[i].slice(0, pos);
         // console.log(prod[i]+" array "+[i]);
     }
-    // console.log(allVariables);
-    // console.log("Lineas sin prod: "+arrayOfLines);
+
     for (var i = 0; i < arrayOfLines.length; i++) {
         var pos = arrayOfLines[i].indexOf("=");
-        // var posP =arrayOfLines[i].indexOf("|");
+
         preProd[i] = arrayOfLines[i].substring(pos + 1);
-        // console.log(terminales[i]+" array "+[i]);
-    }
-    // console.log(preProd);
-    for (var i = 0; i < preProd.length; i++) {
-        prod2d[i] = preProd[i].split("|");
-        // console.log(terminales[i]+" array "+[i]);
+
     }
 
-    // console.log(prod2d);
+    for (var i = 0; i < preProd.length; i++) {
+        prod2d[i] = preProd[i].split("|");
+    }
+
+
     for (var i = 0; i < prod2d.length; i++) {
         prod = prod.concat(prod2d[i]);
     }
-    // console.log(prod);
+
     caracteres = allVariables.concat("e", "", " ", null);
     for (var i = 0; i < prod.length; i++) {
         preTerminales[i] = prod[i].replace(/'/g, "~");
         terminales = terminales.concat(regExp.exec(preTerminales[i]));
         terminales = terminales.concat(regExp2.exec(preTerminales[i]));
         terminales = terminales.concat(regExp3.exec(preTerminales[i]));
-        // terminales = terminales.concat(regExp3.exec(preTerminales[i]));
-        // terminales[i] = preTerminales[i].split("-");
+
     }
-    // console.log(preTerminales);
-    // console.log(terminales);
+
     terminales = terminales.filter((el) => !caracteres.includes(el));
-    // console.log(terminales);
+
     for (var i = 0; i < terminales.length; i++) {
         terminales2 = terminales2.concat(terminales[i]);
     }
-    // console.log(terminales2);
+
     var ter3 = [];
     for (var i = 1; i <= terminales2.length; i = i + 2) {
         ter3.push(terminales2[i]);
     }
     terminales2 = ter3;
-    // console.log(ter3);
-    // for (var i = 0; i < terminales2.length; i++) {
-    //     if (terminales2) {}
-    //      = terminales3.concat(terminales2[i].split(""));
-    // }
-    // console.log(terminales2);
-    // console.log("**********");
+
     uniqueTerm = [...new Set(terminales2)];
-    // console.log(uniqueTerm);
+
 
     uniqueTerm = uniqueTerm.filter((el) => !caracteres.includes(el));
     terminales2 = uniqueTerm;
     termBit = terminales2.concat("$");
-    // var matches = "I expect five hundred dollars '$500'.";
-    // matches = matches.replace(/'/g,"-");
-    // alert(matches);
 
-    //matches[1] contains the value between the parentheses
-    // console.log("Regex: "+matches[1]);
-    // var regExp2 = /\-([^-]+)\-/;
-    // var matches = "I expect five hundred dollars '$500'.";
-    // matches = matches.replace(/'/g,"-");
-    // // alert(matches);
-    // var matches2 = regExp2.exec(matches);
-    // //matches[1] contains the value between the parentheses
-    // alert(matches2[1]);
-    // var str = "one'two'three";   
-    // var str2 = str.replace(/'/g,"-"); 
-    // var newstr = str2.split("-").pop().split("-")[0]; // returns 'two'
-    // console.log(newstr);
 
 
     //REMUEVE "'" DENTRO DE LOS ARRAYS
@@ -363,20 +310,14 @@ function run() {
 
     //Result pasa a hacer un objeto y se pierde la 'a' 
     allVariables.forEach((variable, i) => result[variable] = produccion[i]);
-    //_.compact(_.concat())
-    //result = {'S':["S+T","T"],'T':["T*F","F"],'F':["a","b"]}
+
 
 
 
 
     var isRecursive = []
     var newProd = {}
-    // var newGrammar = prod2d
-    // for (var i in newGrammar) {
-    //     for (var j in newGrammar[i]) {
-    //         newGrammar[i][j] = newGrammar[i][j].replace(/'/g, "")
-    //     }
-    // }
+
     for (let i = 0; i < allVariables.length; i++) {
         if (isRecursive[i] == undefined) {
             isRecursive[i] = []
@@ -488,23 +429,18 @@ function run() {
 
 function primeroSiguiente(gramNoRecursiveTxt, gramNoReAllVariables) {
     console.log("-----INIT function primeroSiguiente() -----")
-    // document.getElementById("runbtn").disabled = true;
+
 
 
     grammar = gramNoRecursiveTxt.replace(/ /g, "");
 
-    // console.log(grammar);
+
     arrayOfLines = _.compact(grammar.split('\n'));
-    // console.log(arrayOfLines);
+
     allVariables = gramNoReAllVariables;
-    // for (var i = 0; i < arrayOfLines.length; i++) {
-    //     var pos = arrayOfLines[i].indexOf("=");
-    //     allVariables[i] = arrayOfLines[i].slice(0, pos);
-    //     // console.log(prod[i]+" array "+[i]);
-    // }
+
     
-    // console.log(allVariables);
-    // console.log("Lineas sin prod: "+arrayOfLines);
+
     for (var i = 0; i < arrayOfLines.length; i++) {
         var pos = arrayOfLines[i].indexOf("=");
         // var posP =arrayOfLines[i].indexOf("|");
@@ -531,53 +467,29 @@ function primeroSiguiente(gramNoRecursiveTxt, gramNoReAllVariables) {
         terminales = terminales.concat(regExp.exec(preTerminales[i]));
         terminales = terminales.concat(regExp2.exec(preTerminales[i]));
         terminales = terminales.concat(regExp3.exec(preTerminales[i]));
-        // terminales = terminales.concat(regExp3.exec(preTerminales[i]));
-        // terminales[i] = preTerminales[i].split("-");
+
     }
-    // console.log(preTerminales);
-    // console.log(terminales);
+
     terminales = terminales.filter((el) => !caracteres.includes(el));
-    // console.log(terminales);
+
     terminales2 = []
     for (var i = 0; i < terminales.length; i++) {
         terminales2 = terminales2.concat(terminales[i]);
     }
-    // console.log(terminales2);
+
     var ter3 = [];
     for (var i = 1; i <= terminales2.length; i = i + 2) {
         ter3.push(terminales2[i]);
     }
     terminales2 = ter3;
-    // console.log(ter3);
-    // for (var i = 0; i < terminales2.length; i++) {
-    //     if (terminales2) {}
-    //      = terminales3.concat(terminales2[i].split(""));
-    // }
-    // console.log(terminales2);
-    // console.log("**********");
+
     uniqueTerm = [...new Set(terminales2)];
-    // console.log(uniqueTerm);
+
 
     uniqueTerm = uniqueTerm.filter((el) => !caracteres.includes(el));
     terminales2 = uniqueTerm;
     termBit = terminales2.concat("$");
-    // var matches = "I expect five hundred dollars '$500'.";
-    // matches = matches.replace(/'/g,"-");
-    // alert(matches);
 
-    //matches[1] contains the value between the parentheses
-    // console.log("Regex: "+matches[1]);
-    // var regExp2 = /\-([^-]+)\-/;
-    // var matches = "I expect five hundred dollars '$500'.";
-    // matches = matches.replace(/'/g,"-");
-    // // alert(matches);
-    // var matches2 = regExp2.exec(matches);
-    // //matches[1] contains the value between the parentheses
-    // alert(matches2[1]);
-    // var str = "one'two'three";   
-    // var str2 = str.replace(/'/g,"-"); 
-    // var newstr = str2.split("-").pop().split("-")[0]; // returns 'two'
-    // console.log(newstr);
     produccion = prod2d;
     for (var i in produccion) {
         for (var j in produccion[i]) {
@@ -596,10 +508,7 @@ function primeroSiguiente(gramNoRecursiveTxt, gramNoReAllVariables) {
 
 function showArrays2(uniqueVari) {
     console.log("-----INIT function showArrays2() -----")
-    // console.log(allVariables);
-    // uniqueVari = [...new Set(vari)];
-    // console.log('SinRKey', gramNoReAllVariables);
-    // console.log('OrigiVar', uniqueVari);
+
     
     var arrayTerminals = terminales2;
     arrayTerminals.push("$");
@@ -634,8 +543,7 @@ function showArrays2(uniqueVari) {
                     }
                 }
             }
-            // console.log(termi);
-            // console.log(posic);
+
         }
     }
 
@@ -654,11 +562,7 @@ function showArrays2(uniqueVari) {
     for (var i in caden) {
         prueba.unshift(caden[i]);
     }
-    // console.log(prueba);
 
-    // console.log(produk);
-    // console.log('Funcion PRIMERO');
-    // console.log(fPrimero);
 
     var tablaFun = '';
     for (var i in uniqueVari) {
@@ -666,12 +570,7 @@ function showArrays2(uniqueVari) {
     }
     document.getElementById("funPrimero").innerHTML = tablaFun;
 
-    // console.log('Funcion SIGUIENTE');
 
-    // for (var i in uniqueVari){
-    //     fSiguiente.push(siguiente(uniqueVari[i]));
-    // }
-    // console.log(fSiguiente);
 
 
     var tablaSig = '';
@@ -679,9 +578,7 @@ function showArrays2(uniqueVari) {
         tablaSig += '<tr class="mdc-data-table__row"><td class="mdc-data-table__cell">SIGUIENTE(<span class="colores">' + uniqueVari[i] + '</span>):</td><td class="mdc-data-table__cell"><span class="llaves">{</span> ' + fSiguiente[i] + ' <span class="llaves">}</span></td></tr>';
     }
     document.getElementById("funSiguiente").innerHTML = tablaSig;
-    // document.getElementById("funSiguiente").style.visibility = "visible";
-    // const found = prod2d[3][0].indexOf('T');
-    // console.log(found);
+
 
     var headSym = '<tr class="mdc-data-table__row"><td></td>';
     for (var i in terminales2) {
@@ -748,13 +645,7 @@ function showArrays(gramNoRecursiveTxt, gramNoReAllVariables) {
     }
     // RENDERIZA LA COLUMNA PRODUCCIONES
     document.getElementById("producciones").innerHTML = tabla;
-    // fSiguiente = [
-    // [')','$'],
-    // [')','$'],
-    // ['+',')','$'],
-    // ['+',')','$'],
-    // ['*','+',')','$'],
-    // ];
+
     var arrayTerminals = terminales2;
     arrayTerminals.push("$");
     if (arrayEquals(uniqueVari, gramNoReAllVariables)) {
@@ -856,38 +747,7 @@ function showArrays(gramNoRecursiveTxt, gramNoReAllVariables) {
         console.log('Diferentes');
         primeroSiguiente(gramNoRecursiveTxt, gramNoReAllVariables);
     }
-    console.log(produk);
-    console.log(produk1);
-    console.log(produccion);
-    console.log("----------------------");
-    console.log(result);
-    console.log(fPrimero);
-    console.log(fSiguiente);
-    console.log(produk);
-    // console.log(grammar);
-    // console.log(grammar1);
-    // console.log(arrayOfLines);
-    // console.log(arrayOfLinesCopy);
-    // console.log(vari);
-    // console.log(preProd);
-    // console.log(prod2d);
-    // console.log(prod);
-    // console.log(preTerminales);
-    // console.log(terminales2);
-    // console.log(terminales);
-    // console.log(txtvariables);
-    // console.log(txtterminales);
-    // console.log(uniqueProd);
-    // console.log(uniqueVari);
-    // console.log(uniqueTerm);
-    // console.log(caracteres);
-    console.log("----------------------");
+
     console.log("-----END function showArrays() -----")
 }
 // document.getElementById('fileForUpload').addEventListener('change', run, false);
-
-//UPGRADE
-function tryLodash(){
-    let testLod = _.chunk(['a', 'b', 'c', 'd'], 2);
-    console.log("lodash:",testLod);
-}
